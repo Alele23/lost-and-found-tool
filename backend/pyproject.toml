@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+# Run pytest from backend/. These settings let test modules do `import app...`
+# and keep test discovery scoped to the tests/ directory.
+pythonpath = ["."]
+testpaths = ["tests"]
