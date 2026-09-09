@@ -4,6 +4,9 @@ __pycache__/
 *.pyc
 .env
 
+# Secrets / credentials
+service_account.json
+
 # Node
 node_modules/
 dist/
