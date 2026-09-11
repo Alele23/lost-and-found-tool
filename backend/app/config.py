@@ -1,17 +1,3 @@
-"""Application configuration.
-
-Every secret and environment-specific value the app needs is declared here and
-loaded from environment variables. In local development those come from a
-``.env`` file in ``backend/`` that is git-ignored.
-
-Usage::
-
-    from app.config import get_settings
-
-    settings = get_settings()
-    settings.api_secret_key
-"""
-
 from __future__ import annotations
 
 from functools import lru_cache
@@ -47,9 +33,7 @@ class Settings(BaseSettings):
     # Google AI Studio key for the Gemini vision calls (Step 5).
     gemini_api_key: str
 
-    # Which Gemini model handles the photo -> fields extraction.
-    # gemini-2.5-flash was retired for new callers; the API's own error
-    # pointed at this replacement (checked live 2026-09-11).
+    # Gemini model handles the photo -> fields extraction.
     gemini_model: str = "gemini-3.6-flash"
 
     # Filename (or absolute path) of the Google service-account JSON used for
