@@ -47,6 +47,11 @@ class Settings(BaseSettings):
     # Google AI Studio key for the Gemini vision calls (Step 5).
     gemini_api_key: str
 
+    # Which Gemini model handles the photo -> fields extraction.
+    # gemini-2.5-flash was retired for new callers; the API's own error
+    # pointed at this replacement (checked live 2026-09-11).
+    gemini_model: str = "gemini-3.6-flash"
+
     # Filename (or absolute path) of the Google service-account JSON used for
     # the Sheets API (Step 6). Relative values are resolved against BASE_DIR.
     google_credentials_file: str = "service_account.json"
