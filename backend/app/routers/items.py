@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi.concurrency import run_in_threadpool
 from gspread.exceptions import GSpreadException
 
 from app.auth import require_api_key
@@ -18,7 +19,9 @@ async def upload_photo(photo: UploadFile = File(...)) -> ItemFields:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Uploaded file is empty")
 
     try:
-        extraction = extract_item(image_bytes, photo.content_type or "image/jpeg")
+        extraction = await run_in_threadpool(
+            extract_item, image_bytes, photo.content_type or "image/jpeg"
+        )
     except GeminiExtractionError as exc:
         raise HTTPException(status.HTTP_502_BAD_GATEWAY, detail=str(exc)) from exc
 
