@@ -18,9 +18,9 @@ from app.models import ItemExtraction
 
 PROMPT = (
     "You are helping a university lost-and-found desk log an item from a "
-    "photo. Write one concise sentence describing the item -- what it is, "
+    "photo. Write a very concise description of the item -- what it is, "
     "its color, and any brand or distinguishing details visible in the "
-    'photo. Then classify it into the best matching category. If nothing '
+    'photo (for example: Cream colored Bose Headphones). Then classify it into the best matching category. If nothing '
     'fits well, use "Other".'
 )
 
