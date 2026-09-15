@@ -7,6 +7,9 @@ __pycache__/
 # Secrets / credentials
 service_account.json
 
+# Local-only test images -- never committed (may show real found items)
+/test_photos/
+
 # Node
 node_modules/
 dist/
