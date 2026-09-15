@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     gemini_api_key: str
 
     # Gemini model handles the photo -> fields extraction.
-    gemini_model: str = "gemini-3.6-flash"
+    gemini_model: str = "gemini-3.5-flash-lite"
 
     # Filename (or absolute path) of the Google service-account JSON used for
     # the Sheets API (Step 6). Relative values are resolved against BASE_DIR.
