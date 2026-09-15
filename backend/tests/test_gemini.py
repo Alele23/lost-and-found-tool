@@ -52,6 +52,10 @@ def _server_error() -> errors.ServerError:
     return errors.ServerError(503, {"error": {"message": "busy", "status": "UNAVAILABLE"}})
 
 
+def _client_error() -> errors.ClientError:
+    return errors.ClientError(429, {"error": {"message": "quota exceeded", "status": "RESOURCE_EXHAUSTED"}})
+
+
 @pytest.fixture(autouse=True)
 def _no_real_sleep(monkeypatch: pytest.MonkeyPatch) -> None:
     """Skip the real backoff delay so retry tests run instantly."""
@@ -93,3 +97,14 @@ def test_unparsable_response_raises() -> None:
 
     with pytest.raises(GeminiExtractionError, match="no parsable result"):
         extract_item(b"fake-bytes", "image/png", client=client, settings=TEST_SETTINGS)
+
+
+def test_client_error_fails_immediately_without_retrying() -> None:
+    # A 429/quota-exceeded won't succeed on retry, so it shouldn't burn more
+    # attempts against the quota -- confirm it raises on the first try.
+    client = _FakeClient([_client_error(), _ok_response()])
+
+    with pytest.raises(GeminiExtractionError, match="rejected the request"):
+        extract_item(b"fake-bytes", "image/png", client=client, settings=TEST_SETTINGS)
+
+    assert len(client.models.calls) == 1

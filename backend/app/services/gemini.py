@@ -69,6 +69,8 @@ def extract_item(
             if attempt < _MAX_ATTEMPTS - 1:
                 time.sleep(_BACKOFF_SECONDS * (attempt + 1))
             continue
+        except errors.ClientError as exc:
+            raise GeminiExtractionError(f"Gemini rejected the request: {exc}") from exc
 
         if response.parsed is None:
             raise GeminiExtractionError(
