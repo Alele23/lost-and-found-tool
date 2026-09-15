@@ -20,3 +20,21 @@ export async function uploadPhoto(file: File): Promise<ItemFields> {
 
   return res.json()
 }
+
+export async function createItem(item: ItemFields): Promise<ItemFields> {
+  const res = await fetch(`${API_BASE_URL}/items`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": API_KEY,
+    },
+    body: JSON.stringify(item),
+  })
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => null)
+    throw new Error(body?.detail ?? `Save failed (${res.status})`)
+  }
+
+  return res.json()
+}

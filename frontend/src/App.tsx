@@ -1,23 +1,42 @@
 import { useState } from "react"
+import { ReviewScreen } from "./components/ReviewScreen"
 import { UploadScreen } from "./components/UploadScreen"
 import type { ItemFields } from "./types"
 
-function App() {
-  const [extracted, setExtracted] = useState<ItemFields | null>(null)
+type Screen =
+  | { name: "upload" }
+  | { name: "review"; item: ItemFields }
+  | { name: "saved"; item: ItemFields }
 
-  if (extracted) {
-    // Temporary stand-in until the review screen is built next.
+function App() {
+  const [screen, setScreen] = useState<Screen>({ name: "upload" })
+
+  if (screen.name === "review") {
     return (
-      <main className="min-h-screen bg-slate-50 p-4">
-        <h1 className="mb-2 text-lg font-semibold">Extracted (review screen goes here next)</h1>
-        <pre className="whitespace-pre-wrap rounded-lg bg-white p-4 text-sm shadow">
-          {JSON.stringify(extracted, null, 2)}
-        </pre>
+      <ReviewScreen
+        item={screen.item}
+        onSaved={(item) => setScreen({ name: "saved", item })}
+      />
+    )
+  }
+
+  if (screen.name === "saved") {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 p-4">
+        <p className="text-xl font-semibold text-slate-800">Saved ✓</p>
+        <p className="text-sm text-slate-600">{screen.item.item_description}</p>
+        <button
+          type="button"
+          onClick={() => setScreen({ name: "upload" })}
+          className="w-full max-w-sm rounded-lg bg-slate-800 py-3 font-medium text-white"
+        >
+          Log Another Item
+        </button>
       </main>
     )
   }
 
-  return <UploadScreen onExtracted={setExtracted} />
+  return <UploadScreen onExtracted={(item) => setScreen({ name: "review", item })} />
 }
 
 export default App
